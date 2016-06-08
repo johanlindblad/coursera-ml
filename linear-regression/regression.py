@@ -30,6 +30,7 @@ x = np.concatenate((x_zero, x), axis=1)
 
 alpha = 0.001
 precision = 0.0001
+regularization_lambda = 0.01
 
 theta = np.array([1] * n)
 
@@ -39,7 +40,13 @@ def hypothesis(theta, x):
 def cost_function(theta, x, y):
     diffs = hypothesis(theta, x) - np.transpose(y)
     squared = np.multiply(diffs, diffs)
-    return 1.0/(m*2) * np.sum(squared)
+
+    theta_squared = np.multiply(theta, theta)[1:-1]
+    theta_squared_sum = np.sum(theta_squared)
+
+    both_sums = squared + theta_squared_sum
+
+    return 1.0/(m*2) * np.sum(both_sums)
 
 iterations = 0
 
@@ -59,6 +66,9 @@ while True:
     # Summera för alla variabler på en gång
     sums = np.sum(times_x, axis=0)
     deltas = sums * alpha/m
+
+    # Regularization
+    theta = theta * (1 - (alpha*regularization_lambda/m))
 
     theta = (theta - deltas.A1)
     max_diff = np.amax(abs(deltas))
