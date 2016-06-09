@@ -3,7 +3,9 @@ import matplotlib.pyplot as plot
 
 data = np.loadtxt("ex2data1.txt", delimiter=",")
 
-normalize = False
+_, y = np.hsplit(data, [-1])
+
+normalize = True
 
 if normalize:
     # Normalisera enligt (X - snitt) / varians
@@ -20,7 +22,7 @@ if normalize:
     data = data - averages
     data = data / scaling_factors
 
-x, y = np.hsplit(data, [-1])
+x, _ = np.hsplit(data, [-1])
 m = x.shape[0]
 n = x.shape[1] + 1
 
@@ -29,7 +31,7 @@ x_zero = np.matrix([1] * m).transpose()
 x = np.concatenate((x_zero, x), axis=1)
 
 alpha = 0.00001
-precision = 0.001
+precision = 0.0001
 regularization_lambda = 0.0
 
 theta = np.array([1] * n)
@@ -39,7 +41,6 @@ def logistic(x):
 
 def hypothesis(theta, x):
     thetax = x.dot(theta)
-    print(logistic(thetax))
     return logistic(thetax)
     #exp = np.exp(-thetax)
     #plusone = exp + 1
@@ -96,7 +97,7 @@ while True:
 
 print(theta)
 
-#plot.figure(1)
-#plot.plot(J_x, J_y)
+plot.figure(1)
+plot.plot(J_x, J_y)
 
-#plot.show()
+plot.show()
